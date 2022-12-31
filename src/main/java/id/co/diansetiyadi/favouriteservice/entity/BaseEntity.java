@@ -1,11 +1,29 @@
 package id.co.diansetiyadi.favouriteservice.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.util.Date;
 
-public class BaseEntity {
+@Setter
+@Getter
+@MappedSuperclass
+public abstract class BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private Date createdAt;
-    private Date updatedAt;
-    private boolean isDeleted;
+    @Column(name = "created_date")
+    @CreatedDate
+    private Date createdDate;
+    @Column(name = "updatedDate")
+    private String updatedDate;
+    @Column(name = "created_by", length = 50)
+    private String createdBy;
+    @Column(name = "updated_by", length = 50)
+    private String updatedBy;
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
 }
