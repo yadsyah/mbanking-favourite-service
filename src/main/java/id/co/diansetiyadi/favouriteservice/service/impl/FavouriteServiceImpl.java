@@ -38,9 +38,9 @@ public class FavouriteServiceImpl implements FavouriteService {
 
     @Override
     public AddFavouriteResponse addFavourite(AddFavouriteRequest request) {
-        boolean existFavourite = favouriteRepository.existFindByCifAndCategoryAndSourceOfAccountNo(request.getCif(), request.getCategoryFavouriteEnum(), request.getSourceOfFundAccount());
+        Favourite existFavourite = favouriteRepository.findByCifAndCategoryAndSourceOfAccountNo(request.getCif(), request.getCategoryFavouriteEnum(), request.getSourceOfFundAccount()).orElse(null);
 
-        if (existFavourite) {
+        if (null != existFavourite) {
             Favourite favourite = favouriteRepository.findByCifAndCategoryAndSourceOfAccountNo(request.getCif(), request.getCategoryFavouriteEnum(), request.getSourceOfFundAccount()).orElseThrow(() -> new FavouriteNotFoundException("favourite not found!"));
             favourite.setAmount(new BigDecimal(request.getAmount()));
             favourite = favouriteRepository.save(favourite);

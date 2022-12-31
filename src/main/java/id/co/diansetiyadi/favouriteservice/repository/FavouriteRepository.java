@@ -12,10 +12,9 @@ import java.util.Optional;
 @Repository
 public interface FavouriteRepository extends JpaRepository<Favourite, String> {
 
-    @Query("SELECT favourite FROM Favourite favorite WHERE favourite.cif=:cif AND favourite.categoryFavouriteEnum=:categoryFavouriteEnum AND favourite.sourceOfFundAccount=:sourceOfFundAccount")
+    @Query("SELECT Favourite FROM Favourite WHERE cif=:cif AND categoryFavouriteEnum=:categoryFavouriteEnum AND sourceOfFundAccount=:sourceOfFundAccount")
     Optional<Favourite> findByCifAndCategoryAndSourceOfAccountNo(String cif, CategoryFavouriteEnum categoryFavouriteEnum, String sourceOfFundAccount);
 
-    @Query("SELECT favourite FROM Favourite WHERE favourite.cif=:cif AND favourite.categoryFavouriteEnum=:categoryFavouriteEnum")
+    @Query("SELECT Favourite FROM Favourite WHERE cif=:cif AND categoryFavouriteEnum=:categoryFavouriteEnum")
     List<Favourite> findByCifAndCategory(String cif, CategoryFavouriteEnum categoryFavouriteEnum);
-    boolean existFindByCifAndCategoryAndSourceOfAccountNo(String cif, CategoryFavouriteEnum categoryFavouriteEnum, String sourceOfFundAccount);
 }

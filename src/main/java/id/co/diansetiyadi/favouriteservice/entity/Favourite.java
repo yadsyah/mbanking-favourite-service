@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-@Entity
-@Table
+@Entity(name = "Favourite")
+@Table(name = "favourite")
 public class Favourite extends BaseEntity{
 
 
