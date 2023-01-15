@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@Slf4j
 public class FavouriteServiceImpl implements FavouriteService {
 
 
@@ -87,9 +86,16 @@ public class FavouriteServiceImpl implements FavouriteService {
 
     @Override
     public UpdateFavouriteResponse updateFavourite(UpdateFavouriteRequest request) {
-
-
-        return null;
+        Favourite exisFavourite = favouriteRepository.findById(request.getIdFavourite()).orElseThrow(() -> new FavouriteNotFoundException("favourite not found!"));
+        exisFavourite.setAccountNo(request.getAccountNo());
+        exisFavourite.setAmount(new BigDecimal(request.getAmount()));
+        exisFavourite.setBillNo(request.getBillNo());
+        exisFavourite.setBankCode(request.getBankCode());
+        exisFavourite.setSourceOfFundAccount(request.getSourceOfFundAccount());
+        favouriteRepository.save(exisFavourite);
+        return UpdateFavouriteResponse.builder()
+        .idFavourite(exisFavourite.getId())
+        .build();
     }
 
     @Override

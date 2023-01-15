@@ -9,7 +9,6 @@ import id.co.diansetiyadi.favouriteservice.dto.response.DeleteFavouriteResponse;
 import id.co.diansetiyadi.favouriteservice.dto.response.InquiryFavouriteResponse;
 import id.co.diansetiyadi.favouriteservice.dto.response.UpdateFavouriteResponse;
 
-import java.util.List;
 
 public interface FavouriteService {
 

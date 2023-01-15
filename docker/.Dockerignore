@@ -5,3 +5,7 @@ docker-compose*
 **/**.iml
 **/.gitignore
 **/target
+.vscode/**
+.vscode/
+.idea/**
+.idea/
