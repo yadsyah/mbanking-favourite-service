@@ -6,6 +6,8 @@ import id.co.diansetiyadi.favouriteservice.dto.request.InquiryFavouriteRequest;
 import id.co.diansetiyadi.favouriteservice.dto.request.UpdateFavouriteRequest;
 import id.co.diansetiyadi.favouriteservice.dto.response.BaseResponse;
 import id.co.diansetiyadi.favouriteservice.service.FavouriteService;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 import java.util.UUID;
@@ -27,6 +29,7 @@ public class FavouriteController {
         this.favouriteService = favouriteService;
     }
 
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Add Favourite") })
     @PostMapping("/add")
     @ResponseBody
     public Mono<BaseResponse> addFavourite(@RequestBody @Valid AddFavouriteRequest addFavouriteRequest) {
@@ -38,6 +41,7 @@ public class FavouriteController {
         .build());
     }
 
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Delete By IdFavourite") })
     @PostMapping("/delete")
     @ResponseBody
     public Mono<BaseResponse> deleteFavourite(@RequestBody @Valid DeleteFavouriteRequest request) {
@@ -49,6 +53,7 @@ public class FavouriteController {
         .build());
     }
 
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Update Favourite") })
     @PostMapping("/update")
     @ResponseBody
     public Mono<BaseResponse> updateFavourite(@RequestBody @Valid UpdateFavouriteRequest request) {
@@ -59,6 +64,7 @@ public class FavouriteController {
         .build());
     }
 
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Inquiry Favourite") })
     @PostMapping("/inquiry")
     @ResponseBody
     public Mono<BaseResponse> inquiryFavourite(@RequestBody @Valid InquiryFavouriteRequest request) {
