@@ -10,35 +10,34 @@ import id.co.diansetiyadi.favouriteservice.dto.response.DeleteFavouriteResponse;
 import id.co.diansetiyadi.favouriteservice.dto.response.InquiryFavouriteResponse;
 import id.co.diansetiyadi.favouriteservice.dto.response.UpdateFavouriteResponse;
 import id.co.diansetiyadi.favouriteservice.entity.Favourite;
+import id.co.diansetiyadi.favouriteservice.event.publisher.FavouriteEventPublisher;
 import id.co.diansetiyadi.favouriteservice.handling.FavouriteNotFoundException;
 import id.co.diansetiyadi.favouriteservice.repository.FavouriteRepository;
 import id.co.diansetiyadi.favouriteservice.service.FavouriteService;
 import id.co.diansetiyadi.favouriteservice.util.CategoryFavouriteEnum;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class FavouriteServiceImpl implements FavouriteService {
 
 
     private final FavouriteRepository favouriteRepository;
     private final Gson gson;
-
-    @Autowired
-    public FavouriteServiceImpl(FavouriteRepository favouriteRepository, Gson gson) {
-        this.favouriteRepository = favouriteRepository;
-        this.gson = gson;
-    }
+    private final FavouriteEventPublisher favouriteEventPublisher;
 
 
     @Override
     public AddFavouriteResponse addFavourite(AddFavouriteRequest request) {
         Favourite existFavourite = favouriteRepository.findByCifAndCategoryAndSourceOfAccountNo(request.getCif(), request.getCategoryFavouriteEnum(), request.getSourceOfFundAccount()).orElse(null);
-
+        log.info("TEST");
         if (null != existFavourite) {
             Favourite favourite = favouriteRepository.findByCifAndCategoryAndSourceOfAccountNo(request.getCif(), request.getCategoryFavouriteEnum(), request.getSourceOfFundAccount()).orElseThrow(() -> new FavouriteNotFoundException("favourite not found!"));
             favourite.setAmount(new BigDecimal(request.getAmount()));
@@ -70,6 +69,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         }
 
         newFavourite = favouriteRepository.save(newFavourite);
+        favouriteEventPublisher.createFavouriteEvent(request.getCif(), request.getCategoryFavouriteEnum());
 
         return AddFavouriteResponse.builder()
                 .idFavourite(newFavourite.getId())
@@ -81,7 +81,9 @@ public class FavouriteServiceImpl implements FavouriteService {
 
         Favourite existFavourite = favouriteRepository.findById(request.getIdFavourite()).orElseThrow(() -> new FavouriteNotFoundException("favourite not found!"));
         favouriteRepository.delete(existFavourite);
-        return DeleteFavouriteResponse.builder().idFavourite(request.getIdFavourite()).build();
+        return DeleteFavouriteResponse.builder()
+        .idFavourite(request.getIdFavourite())
+        .build();
     }
 
     @Override
@@ -94,8 +96,8 @@ public class FavouriteServiceImpl implements FavouriteService {
         exisFavourite.setSourceOfFundAccount(request.getSourceOfFundAccount());
         favouriteRepository.save(exisFavourite);
         return UpdateFavouriteResponse.builder()
-        .idFavourite(exisFavourite.getId())
-        .build();
+            .idFavourite(exisFavourite.getId())
+            .build();
     }
 
     @Override
